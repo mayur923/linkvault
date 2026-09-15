@@ -17,6 +17,9 @@ const DEFAULT_PREFS={theme:"dark",accent:"aurora",view:"grid",filter:"all",sort:
 function makeId(){return "lv_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,9)}
 function normalizeLink(x,i){return {...x,id:x.id||makeId(),name:String(x.name||"Untitled"),url:String(x.url||"https://example.com"),category:x.category||"General",target:x.target||"_blank",favorite:!!x.favorite,pinned:!!x.pinned,added:Number(x.added)||Date.now()+i,note:String(x.note||""),customLogo:x.customLogo||null}}
 let rawLinks=load("lv-lux-links",DEFAULT_LINKS), rawCollections=load("lv-lux-collections",DEFAULT_COLLECTIONS);
+rawCollections = Array.isArray(rawCollections)
+  ? rawCollections.filter(c => String(c.name).toLowerCase() !== "m")
+  : DEFAULT_COLLECTIONS;
 let links=(Array.isArray(rawLinks)?rawLinks:DEFAULT_LINKS).map(normalizeLink), collections=Array.isArray(rawCollections)?rawCollections:DEFAULT_COLLECTIONS.map(x=>({...x}));
 let prefs={...DEFAULT_PREFS,...load("lv-lux-prefs",{})};
 let editing=null,dragId=null,customLogo=null,selectedColor="#ff3344";
