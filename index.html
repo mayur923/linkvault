@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080809">
+<title>Mayur's — Personal Space</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="ambient aurora-1"></div><div class="ambient aurora-2"></div><div class="ambient aurora-3"></div>
+<div class="fx-layer" aria-hidden="true"><div class="fx-vignette"></div><div class="fx-scan"></div><div id="particles"></div><div class="fx-corner fx-c1"></div><div class="fx-corner fx-c2"></div><div class="fx-corner fx-c3"></div><div class="fx-corner fx-c4"></div><div id="cursorGlow"></div></div>
+
+<div class="app">
+<header class="topbar">
+  <a class="brand" href="#" onclick="return false">
+    <span class="brand-mark">L</span>
+    <span>Link<span>Vault</span><small>PRIVATE</small></span>
+  </a>
+  <div class="top-center"><span class="live-dot"></span><span id="dateText"></span></div>
+  <div class="top-actions">
+    <button class="glass-btn" id="commandBtn" title="Command palette">⌘</button>
+    <button class="glass-btn" id="themeBtn" title="Change theme">◐</button>
+    <button class="glass-btn" id="settingsBtn" title="Settings">⚙</button>
+    <button class="add-btn" id="addBtn"><span>＋</span> Add shortcut</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow"><span></span><b id="greeting">WELCOME BACK</b><strong> MAYUR</strong></div>
+  <h1><em>✦ WELCOME BACK, MAYUR</em></h1>
+  
+
+  <div class="search-shell">
+    <span class="search-icon">⌕</span>
+    <input id="search" type="search" placeholder="Search your shortcuts..." autocomplete="off">
+    <button id="voiceBtn" class="search-tool" title="Voice search">◉</button>
+    <button id="clearSearch" class="search-tool clear hidden">×</button>
+    <div class="keys"><kbd>Ctrl</kbd><kbd>K</kbd></div>
+  </div>
+  <div class="quick-line">
+    <span><b id="totalStat">0</b> shortcuts</span><i></i>
+    <span><b id="favStat">0</b> favourites</span><i></i>
+    <span><b id="catStat">0</b> collections</span>
+  </div>
+</section>
+
+<section class="workspace">
+  <aside class="sidebar" id="sidebar">
+    <div class="side-heading">MY SPACE</div>
+    <button class="nav-item active" data-filter="all"><span class="nav-icon">⌂</span>All websites <b id="allCount">0</b></button>
+    <button class="nav-item" data-filter="favorite"><span class="nav-icon">✦</span>Favourites <b id="favCount">0</b></button>
+    <button class="nav-item" data-filter="recent"><span class="nav-icon">◷</span>Recently added</button>
+    <div class="side-heading collections-title">COLLECTIONS</div>
+    <div id="collections"></div>
+    <div class="side-line"></div>
+    <button class="side-action" id="newCollection">＋ New collection</button>
+    <button class="side-action" id="importBtn">⇧ Import backup</button>
+    <button class="side-action" id="exportBtn">⇩ Export backup</button>
+    <input type="file" id="fileInput" accept=".json" hidden>
+  </aside>
+
+  <main class="main">
+    <div class="section-top">
+      <div><small>SHORTCUT LIBRARY</small><h2 id="sectionTitle">All websites</h2></div>
+      <div class="toolbar">
+        <span id="resultCount">0 results</span>
+        <button class="tool-btn active" data-view="grid">▦</button>
+        <button class="tool-btn" data-view="compact">▤</button>
+        <button class="tool-btn" data-view="list">☷</button>
+        <button class="sort-btn" id="sortBtn">⇅ <span>Sort</span></button>
+      </div>
+    </div>
+
+    <div class="tagbar" id="tagbar"></div>
+    <div class="drag-note"><span>✦</span> Drag to rearrange <i>•</i> Drop an image onto a card to set its logo</div>
+    <section id="links" class="links grid"></section>
+    <div id="empty" class="empty hidden"><div class="empty-icon">⌕</div><h3>No shortcuts here</h3><p>Try another search or add your first website.</p></div>
+  </main>
+</section>
+
+<footer><strong>LinkVault</strong><span>•</span> Local-first <span>•</span> <span id="storageStatus">Saved</span> <span>•</span> <span id="clock"></span></footer>
+</div>
+
+<!-- Add/Edit modal -->
+<div class="overlay hidden" id="linkModal">
+<div class="modal-card">
+  <button class="modal-close" id="closeLink">×</button>
+  <div class="modal-head"><div class="modal-symbol">↗</div><div><small>SHORTCUT STUDIO</small><h2 id="modalTitle">Add shortcut</h2></div></div>
+
+  <div class="form-grid">
+    <div class="full"><label>Website name</label><input id="name" placeholder="e.g. ChatGPT"></div>
+    <div class="full"><label>Website URL</label><input id="url" placeholder="https://example.com"></div>
+    <div><label>Collection</label><select id="category"></select></div>
+    <div><label>Open</label><select id="target"><option value="_blank">New tab</option><option value="_self">Same tab</option></select></div>
+  </div>
+
+  <div class="logo-panel">
+    <div class="logo-live"><img id="previewLogo" alt=""><span id="fallbackLetter">W</span></div>
+    <div class="logo-info"><b id="previewName">Website logo</b><small id="previewHost">Automatic favicon detection</small><div class="logo-status" id="logoStatus">Auto-detecting logo…</div></div>
+    <button class="outline-btn" id="uploadLogo">Upload logo</button>
+    <button class="outline-btn" id="resetLogo">Auto</button>
+    <input type="file" id="logoInput" accept="image/*" hidden>
+  </div>
+
+  <div class="advanced-row">
+    <label class="switch-label"><input type="checkbox" id="favorite"><span></span> Favourite</label>
+    <label class="switch-label"><input type="checkbox" id="pinned"><span></span> Pin to top</label>
+  </div>
+
+  <label>Personal note <em>optional</em></label>
+  <input id="note" placeholder="e.g. Daily AI workspace">
+
+  <div class="modal-actions"><button class="secondary" id="cancelLink">Cancel</button><button class="primary" id="saveLink">Save shortcut</button></div>
+</div>
+</div>
+
+<!-- Collection modal -->
+<div class="overlay hidden" id="collectionModal">
+<div class="modal-card small-card">
+<button class="modal-close" id="closeCollection">×</button>
+<div class="modal-head"><div class="modal-symbol">＋</div><div><small>ORGANIZE</small><h2>New collection</h2></div></div>
+<label>Collection name</label><input id="collectionName" placeholder="e.g. Projects">
+<label>Accent</label><div class="swatches" id="swatches"></div>
+<div class="modal-actions"><button class="secondary" id="cancelCollection">Cancel</button><button class="primary" id="saveCollection">Create</button></div>
+</div></div>
+
+<!-- Command palette -->
+<div class="overlay hidden" id="commandModal">
+<div class="command-card">
+<div class="command-search"><span>⌕</span><input id="commandSearch" placeholder="Type a command or search..."><kbd>ESC</kbd></div>
+<div id="commands"></div>
+</div></div>
+
+<!-- Settings -->
+<div class="overlay hidden" id="settingsModal">
+<div class="modal-card settings-card">
+<button class="modal-close" id="closeSettings">×</button>
+<div class="modal-head"><div class="modal-symbol">⚙</div><div><small>PERSONALIZE</small><h2>Luxury settings</h2></div></div>
+<div class="setting"><div><b>Animations</b><small>Premium motion and transitions</small></div><input type="checkbox" id="setAnimations"></div>
+<div class="setting"><div><b>Glass effects</b><small>Glow, blur and depth</small></div><input type="checkbox" id="setGlass"></div>
+<div class="setting"><div><b>Confirm delete</b><small>Protect shortcuts from accidents</small></div><input type="checkbox" id="setConfirm"></div>
+<div class="setting"><div><b>Card density</b><small>More or less space between cards</small></div><select id="setDensity"><option value="comfortable">Comfortable</option><option value="dense">Dense</option></select></div>
+<div class="setting"><div><b>Theme accent</b><small>Choose the dashboard personality</small></div><select id="setAccent"><option value="aurora">Aurora</option><option value="violet">Violet Luxe</option><option value="ocean">Ocean Glass</option><option value="sunset">Sunset Silk</option><option value="emerald">Emerald Noir</option><option value="ruby">Ruby Velvet</option><option value="sapphire">Sapphire Elite</option><option value="amethyst">Amethyst Night</option><option value="cyan">Cyber Cyan</option><option value="teal">Teal Prestige</option><option value="gold">Champagne Gold</option><option value="rose">Rose Quartz</option><option value="lavender">Lavender Mist</option><option value="indigo">Indigo Royal</option><option value="electric">Electric Blue</option><option value="magenta">Magenta Noir</option><option value="coral">Coral Silk</option><option value="lime">Lime Neon</option><option value="mint">Mint Ice</option><option value="plasma">Plasma Pink</option><option value="ice">Arctic Ice</option><option value="copper">Copper Noir</option><option value="royal">Royal Purple</option><option value="berry">Berry Luxe</option><option value="pearl">Pearl Aurora</option><option value="midnight">Midnight Blue</option></select></div>
+<div class="danger"><button id="resetAll">Reset dashboard</button></div>
+</div></div>
+
+<div class="context hidden" id="contextMenu"></div>
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
